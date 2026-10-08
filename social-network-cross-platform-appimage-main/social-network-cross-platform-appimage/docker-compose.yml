@@ -1,0 +1,43 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: social-network-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DB_PATH=/app/data/social_network.db
+      - MIGRATIONS_PATH=/app/pkg/db/migrations/sqlite
+    volumes:
+      - db-data:/app/data
+      - uploads-data:/app/uploads
+    networks:
+      - social-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:8080
+    container_name: social-network-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    depends_on:
+      - backend
+    networks:
+      - social-net
+
+volumes:
+  db-data:
+  uploads-data:
+
+networks:
+  social-net:
+    driver: bridge

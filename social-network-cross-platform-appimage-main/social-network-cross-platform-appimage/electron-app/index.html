@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Desktop Messenger</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; }
+    #offline-banner { display: none; background: #ff4c4c; color: white; text-align: center; padding: 10px; width: 100%; position: absolute; top: 0; z-index: 1000; }
+    
+    /* Login Screen */
+    #login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+    .login-box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+    .login-box input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+    .login-box button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .login-box a { display: block; margin-top: 15px; color: #007bff; text-decoration: none; cursor: pointer; }
+    
+    /* Chat Screen */
+    #chat-screen { display: none; width: 100%; flex-direction: row; margin-top: 30px; }
+    #sidebar { width: 250px; background: white; border-right: 1px solid #ddd; overflow-y: auto; }
+    .user-item { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #ccc; }
+    .status-dot.online { background: #28a745; }
+    
+    #main-chat { flex-grow: 1; display: flex; flex-direction: column; background: #fff; }
+    #header { padding: 15px; background: #f8f9fa; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; }
+    #search-bar { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 200px; }
+    
+    #messages-area { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; }
+    .message { padding: 10px; margin-bottom: 10px; border-radius: 8px; max-width: 60%; }
+    .msg-mine { background: #007bff; color: white; align-self: flex-end; }
+    .msg-theirs { background: #e9ecef; color: black; align-self: flex-start; }
+    
+    #input-area { padding: 15px; border-top: 1px solid #ddd; display: flex; align-items: center; background: #f8f9fa; }
+    #emoji-btn { font-size: 20px; cursor: pointer; margin-right: 10px; background: none; border: none; }
+    #message-input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
+    #send-btn { margin-left: 10px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 20px; cursor: pointer; }
+    
+    #emoji-picker { display: none; position: absolute; bottom: 70px; left: 260px; background: white; border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .emoji { cursor: pointer; font-size: 20px; margin: 5px; }
+  </style>
+</head>
+<body>
+
+  <div id="offline-banner">Вы находитесь в оффлайн режиме. Отправка сообщений недоступна.</div>
+
+  <!-- Экран логина -->
+  <div id="login-screen">
+    <div class="login-box">
+      <h2>Вход в Мессенджер</h2>
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Пароль">
+      <button onclick="login()">Войти</button>
+      <a href="#" onclick="openRegistration()">Нет аккаунта? Зарегистрируйтесь в браузере</a>
+    </div>
+  </div>
+
+  <!-- Экран чата -->
+  <div id="chat-screen">
+    <div id="sidebar">
+      <h3 style="padding: 10px; margin: 0; text-align: center; border-bottom: 1px solid #ddd;">Пользователи</h3>
+      <div id="users-list"></div>
+    </div>
+    
+    <div id="main-chat">
+      <div id="header">
+        <span id="chat-with">Выберите пользователя...</span>
+        <div>
+          <input type="text" id="search-bar" placeholder="Поиск сообщений...">
+          <button onclick="logout()" style="margin-left: 10px;">Выйти</button>
+        </div>
+      </div>
+      
+      <div id="messages-area"></div>
+      
+      <div id="emoji-picker"></div>
+      <div id="input-area">
+        <button id="emoji-btn" onclick="toggleEmojis()">😀</button>
+        <input type="text" id="message-input" placeholder="Напишите сообщение...">
+        <button id="send-btn" onclick="sendMessage()">Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
